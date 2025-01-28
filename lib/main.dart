@@ -1,5 +1,7 @@
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:tj_musical_number_book/widgets/song_category_panel.dart'; // SongCategoryPanel 위젯 import
+import 'package:tj_musical_number_book/widgets/song_category_panel.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,37 +31,31 @@ class SongListPage extends StatefulWidget {
 }
 
 class _SongListPageState extends State<SongListPage> {
-  bool _isExpanded1 = false;
-  bool _isExpanded2 = false;
-  bool _isExpanded3 = false;
+  Map<String, bool> _expandedCategories = {}; // 각 카테고리의 확장 상태를 관리
 
-  List<Map<String, String>> getSongsCategory1() {
-    return [
-      {'number': '82054', 'title': '게임의 시작', 'singer': '김준수'},
-      {'number': '82129', 'title': '놈의 마음속으로', 'singer': '김준수 (한지상, 황광호)'},
-    ];
+  Map<String, dynamic> musicalData = {}; // 실제 JSON 데이터가 들어올 타입
+
+  // JSON 파일을 불러오는 함수
+  Future<void> loadData() async {
+    final String response = await rootBundle.loadString('assets/data.json');
+    final data = await json.decode(response);
+    setState(() {
+      musicalData = data['musicals']; // JSON에서 'musicals' 부분만 가져오기
+      // 각 카테고리를 불러올 때 확장 상태를 false로 초기화
+      _expandedCategories = {
+        for (var category in musicalData.keys) category: false,
+      };
+    });
   }
 
-  List<Map<String, String>> getSongsCategory2() {
-    return [
-      {'number': '46897', 'title': '데스노트', 'singer': '홍광호'},
-      {'number': '82177', 'title': '불쌍한 인간', 'singer': '박혜나, 강홍석'},
-    ];
-  }
-
-  List<Map<String, String>> getSongsCategory3() {
-    return [
-      {'number': '82126', 'title': '비밀의 메시지', 'singer': '정선아'},
-      {'number': '42384', 'title': '죽음의 게임', 'singer': '김준수 외'},
-    ];
+  @override
+  void initState() {
+    super.initState();
+    loadData(); // 앱이 시작할 때 JSON 데이터 로드
   }
 
   @override
   Widget build(BuildContext context) {
-    final songsCategory1 = getSongsCategory1();
-    final songsCategory2 = getSongsCategory2();
-    final songsCategory3 = getSongsCategory3();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey[900],
@@ -74,11 +70,12 @@ class _SongListPageState extends State<SongListPage> {
           ),
         ],
       ),
-      body: Column(
+      body: musicalData.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
         children: [
           Container(
             padding: const EdgeInsets.all(8.0),
-            // color: Colors.white38,
             child: Row(
               children: [
                 Expanded(
@@ -98,41 +95,31 @@ class _SongListPageState extends State<SongListPage> {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                children: [
-                  // 첫 번째 카테고리
-                  SongCategoryPanel(
-                    categoryTitle: '카테고리 1',
-                    songs: songsCategory1,
-                    isExpanded: _isExpanded1,
+                children: musicalData.keys.map((category) {
+                  // 여기에서 `List<Map<String, dynamic>>` -> `List<Map<String, String>>`로 변환
+                  var songs = (musicalData[category] as List<dynamic>)
+                      .map<Map<String, String>>((e) {
+                    return {
+                      'title': e['title'] ?? '',
+                      'singer': e['singer'] ?? '',
+                      'tj_number': e['tj_number'] ?? '',
+                      'ky_number': e['ky_number'] ?? '',
+                      'img': e['img'] ?? ''
+                    };
+                  }).toList();
+
+                  return SongCategoryPanel(
+                    categoryTitle: category,
+                    songs: songs,
+                    isExpanded: _expandedCategories[category] ?? false, // 각 카테고리의 확장 상태
                     onExpansionChanged: () {
                       setState(() {
-                        _isExpanded1 = !_isExpanded1;
+                        // 해당 카테고리의 확장 상태를 반전시킴
+                        _expandedCategories[category] = !(_expandedCategories[category] ?? false);
                       });
                     },
-                  ),
-                  // 두 번째 카테고리
-                  SongCategoryPanel(
-                    categoryTitle: '카테고리 2',
-                    songs: songsCategory2,
-                    isExpanded: _isExpanded2,
-                    onExpansionChanged: () {
-                      setState(() {
-                        _isExpanded2 = !_isExpanded2;
-                      });
-                    },
-                  ),
-                  // 세 번째 카테고리
-                  SongCategoryPanel(
-                    categoryTitle: '카테고리 3',
-                    songs: songsCategory3,
-                    isExpanded: _isExpanded3,
-                    onExpansionChanged: () {
-                      setState(() {
-                        _isExpanded3 = !_isExpanded3;
-                      });
-                    },
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
             ),
           ),
@@ -141,4 +128,3 @@ class _SongListPageState extends State<SongListPage> {
     );
   }
 }
-
