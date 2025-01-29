@@ -4,6 +4,7 @@ import 'package:tj_musical_number_book/widgets/song_category_panel.dart';
 import 'package:tj_musical_number_book/services/data_service.dart';
 import 'package:tj_musical_number_book/models/song.dart';
 import 'package:tj_musical_number_book/theme/colors.dart';
+import 'package:tj_musical_number_book/pages/today_song_page.dart';
 
 class SongListPage extends StatefulWidget {
   const SongListPage({super.key});
@@ -39,7 +40,12 @@ class _SongListPageState extends State<SongListPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.menu, color: AppColors.iconColor),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SavedSongsPage()),
+              );
+            },
           ),
         ],
       ),
