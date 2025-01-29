@@ -46,7 +46,7 @@ class SongCategoryPanel extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8.0), // 네모 모서리 둥글게 설정
                         child: Image.asset(
-                          './assets/${song['img'] ?? 'default.png'}',  // 이미지 경로
+                          './assets/imgs/logo/${song['img'] ?? 'default.png'}',  // 이미지 경로
                           fit: BoxFit.cover, // 이미지를 크기에 맞게 채움
                         ),
                       ),

@@ -37,7 +37,7 @@ class _SongListPageState extends State<SongListPage> {
 
   // JSON 파일을 불러오는 함수
   Future<void> loadData() async {
-    final String response = await rootBundle.loadString('assets/data.json');
+    final String response = await rootBundle.loadString('./assets/data/data.json');
     final data = await json.decode(response);
     setState(() {
       musicalData = data['musicals']; // JSON에서 'musicals' 부분만 가져오기
