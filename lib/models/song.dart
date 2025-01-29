@@ -8,6 +8,7 @@ class Song {
 
   Song({required this.title, required this.singer, required this.tjNumber, required this.kyNumber, required this.img});
 
+  // JSON에서 Song 객체로 변환
   factory Song.fromJson(Map<String, dynamic> json) {
     return Song(
       title: json['title'] ?? '',
@@ -16,5 +17,16 @@ class Song {
       kyNumber: json['ky_number'] ?? '',
       img: json['img'] ?? '',
     );
+  }
+
+  // Song 객체를 JSON으로 변환
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'singer': singer,
+      'tj_number': tjNumber,
+      'ky_number': kyNumber,
+      'img': img,
+    };
   }
 }
