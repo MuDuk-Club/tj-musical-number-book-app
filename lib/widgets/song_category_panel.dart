@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tj_musical_number_book/theme/colors.dart';
+import '../models/song.dart';
+import '../services/song_service.dart';
 
 class SongCategoryPanel extends StatelessWidget {
   final String categoryTitle;
@@ -74,7 +76,15 @@ class SongCategoryPanel extends StatelessWidget {
                 subtitle: Text(song['singer']!),
                 trailing: IconButton(
                   icon: const Icon(Icons.add_circle_outline, color: AppColors.circleBorder),
-                  onPressed: () {
+                  onPressed: () async {
+                    Song songToSave = Song(
+                      title: song['title']!,
+                      singer: song['singer']!,
+                      tjNumber: song['tj_number']!,
+                      kyNumber: song['ky_number']!,
+                      img: song['img']!,
+                    );
+                    await saveSong(songToSave); // Song 객체를 저장
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('"${song['title']}" 번호가 오늘 부를 넘버에 추가되었습니다.'),
