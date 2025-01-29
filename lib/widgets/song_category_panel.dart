@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tj_musical_number_book/theme/colors.dart';
 
 class SongCategoryPanel extends StatelessWidget {
   final String categoryTitle;
@@ -61,7 +62,7 @@ class SongCategoryPanel extends StatelessWidget {
                       Text(
                         song['tj_number'] ?? '',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 11.0, // 텍스트 크기 조정
                         ),
@@ -72,7 +73,7 @@ class SongCategoryPanel extends StatelessWidget {
                 title: Text(song['title']!, style: const TextStyle(fontWeight: FontWeight.bold)),
                 subtitle: Text(song['singer']!),
                 trailing: IconButton(
-                  icon: const Icon(Icons.add_circle_outline, color: Colors.black38),
+                  icon: const Icon(Icons.add_circle_outline, color: AppColors.circleBorder),
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

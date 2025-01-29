@@ -1,10 +1,9 @@
 // pages/song_list_page.dart (메인 페이지 UI 및 데이터 핸들링)
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tj_musical_number_book/widgets/song_category_panel.dart';
 import 'package:tj_musical_number_book/services/data_service.dart';
 import 'package:tj_musical_number_book/models/song.dart';
+import 'package:tj_musical_number_book/theme/colors.dart';
 
 class SongListPage extends StatefulWidget {
   const SongListPage({super.key});
@@ -35,11 +34,11 @@ class _SongListPageState extends State<SongListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[900],
-        title: const Text('뮤지컬 노래방 번호', style: TextStyle(color: Colors.white)),
+        backgroundColor: AppColors.appBarBackground,
+        title: const Text('뮤지컬 노래방 번호', style: TextStyle(color: AppColors.white)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
+            icon: const Icon(Icons.menu, color: AppColors.iconColor),
             onPressed: () {},
           ),
         ],
@@ -54,7 +53,10 @@ class _SongListPageState extends State<SongListPage> {
               decoration: InputDecoration(
                 hintText: '곡명, 작곡가, 가수 이름으로 검색',
                 prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(color: AppColors.searchBorder),
+                ),
               ),
             ),
           ),

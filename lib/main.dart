@@ -1,6 +1,7 @@
 // main.dart (앱 진입점)
 import 'package:flutter/material.dart';
 import 'package:tj_musical_number_book/pages/song_list_page.dart';
+import 'package:tj_musical_number_book/theme/colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: '뮤지컬 노래방',
-      theme: ThemeData(primarySwatch: Colors.grey),
+      theme: ThemeData(primarySwatch: AppColors.primary as MaterialColor),
       home: const SongListPage(),
     );
   }
